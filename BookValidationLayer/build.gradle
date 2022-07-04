@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.mishenev'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+apply plugin: 'maven-publish'
+
+dependencies {
+    implementation 'com.amazonaws:aws-java-sdk-core:1.12.249'
+
+    // Tests
+    testImplementation 'org.mockito:mockito-core:4.6.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.6.1'
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.mishenev'
+            artifactId = 'lib-validate-layer'
+            version = "0.1-SNAPSHOT"
+            from components.java
+
+            pom {
+                name = 'My AWS Lambda validation layer'
+            }
+        }
+    }
+
+}
