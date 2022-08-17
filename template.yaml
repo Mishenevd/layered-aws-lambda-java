@@ -7,7 +7,16 @@ Description: >
 Globals:
   Function:
     Timeout: 20
-
+    Layers:
+      - !Ref BookValidationLayer
+    Runtime: java11
+    Architectures:
+      - x86_64
+    MemorySize: 512
+    Environment:
+      Variables:
+        JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
+        ENVIRONMENT: PROD
 Resources:
   CreateBookFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -19,16 +28,6 @@ Resources:
           - subnet-0e9463096d7ddb9d3
       CodeUri: CreateBookFunction
       Handler: com.mishenev.post_book.App::handleRequest
-      Layers:
-        - !Ref BookValidationLayer
-      Runtime: java11
-      Architectures:
-        - x86_64
-      MemorySize: 512
-      Environment:
-        Variables:
-          JAVA_TOOL_OPTIONS: -XX:+TieredCompilation -XX:TieredStopAtLevel=1 # More info about tiered compilation https://aws.amazon.com/blogs/compute/optimizing-aws-lambda-function-performance-for-java/
-          ENVIRONMENT: PROD
       Events:
         Book:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
@@ -51,6 +50,26 @@ Resources:
       RetentionPolicy: Retain
     Metadata:
       BuildMethod: java11
+  BooksByNameCounterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-0e3f43d4cb8d16e9c
+        SubnetIds:
+          - subnet-0e9463096d7ddb9d3
+      CodeUri: BooksByNameCounterFunction
+      Handler: com.mishenev.count_book.App::handleRequest
+      Events:
+        Book:
+          Type: Api
+          Properties:
+            Path: /book/count
+            Method: get
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn:
+              arn:aws:secretsmanager:eu-central-1:679305952734:secret:dev_library_postgres_creds-vAa5dM
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -65,3 +84,9 @@ Outputs:
   CreateBookFunctionIamRole:
     Description: "Implicit IAM Role created for Create Book function"
     Value: !GetAtt CreateBookFunctionRole.Arn
+  BooksByNameCounterFunction:
+    Description: "Create Book Lambda Function ARN"
+    Value: !GetAtt BooksByNameCounterFunction.Arn
+  BooksByNameCounterFunctionIamRole:
+    Description: "Implicit IAM Role created for Books by Name Counter function"
+    Value: !GetAtt BooksByNameCounterFunction.Arn

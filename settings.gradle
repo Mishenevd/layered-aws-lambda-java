@@ -2,3 +2,4 @@ rootProject.name = 'library-aws'
 
 include 'BookValidationLayer'
 include 'CreateBookFunction'
+include 'BooksByNameCounterFunction'
