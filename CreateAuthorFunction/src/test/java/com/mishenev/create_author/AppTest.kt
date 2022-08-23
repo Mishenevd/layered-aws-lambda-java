@@ -1,6 +1,7 @@
 package com.mishenev.create_author
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.lambda.runtime.LambdaLogger
 import com.amazonaws.services.lambda.runtime.events.SQSEvent
 import com.amazonaws.services.lambda.runtime.tests.annotations.Event
 import com.mishenev.create_author.db.AuthorRepository
@@ -19,6 +20,9 @@ internal class AppTest {
     private lateinit var contextMock: Context
 
     @MockK
+    private lateinit var loggerMock: LambdaLogger
+
+    @MockK
     private lateinit var authorRepositoryMock: AuthorRepository
 
     @InjectMockKs
@@ -35,10 +39,13 @@ internal class AppTest {
 
         every { authorRepositoryMock.createNewAuthor(createAuthorEvent1) } answers {authorCreatedEvent1}
         every { authorRepositoryMock.createNewAuthor(createAuthorEvent2) } answers {authorCreatedEvent2}
+        every { contextMock.logger } answers { loggerMock }
+        every { loggerMock.log(any() as String)} answers {}
 
         app.handleRequest(event, contextMock)
 
         verify(exactly = 1) { authorRepositoryMock.createNewAuthor(createAuthorEvent1) }
         verify(exactly = 1) { authorRepositoryMock.createNewAuthor(createAuthorEvent2) }
+        verify(exactly = 3) { loggerMock.log(any() as String) }
     }
 }

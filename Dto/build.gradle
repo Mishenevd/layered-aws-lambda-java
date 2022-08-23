@@ -1,0 +1,33 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
+}
+
+group = 'com.mishenev'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'maven-publish'
+
+dependencies {
+
+    implementation 'com.amazonaws:aws-java-sdk-core:1.12.249'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.mishenev'
+            artifactId = 'dto-layer'
+            version = "0.1-SNAPSHOT"
+            from components.java
+
+            pom {
+                name = 'My AWS Lambda DTO layer'
+            }
+        }
+    }
+
+}

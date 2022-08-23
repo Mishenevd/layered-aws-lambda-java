@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass = 'com.mishenev.count_book.App'
+    mainClass = 'com.mishenev.create_author'
 }
 
 group = 'com.mishenev'
@@ -15,11 +15,12 @@ repositories {
     mavenLocal()
 }
 
-
 dependencies {
 
     // AWS Lambda Function layers
     compileOnly 'com.mishenev:lib-validate-layer:0.1-SNAPSHOT'
+    compileOnly 'com.mishenev:dto-layer:0.1-SNAPSHOT'
+    testImplementation 'com.mishenev:dto-layer:0.1-SNAPSHOT'
 
     // AWS libs
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
