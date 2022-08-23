@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass = 'com.mishenev.create_author'
+    mainClass = 'com.mishenev.create_author.App'
 }
 
 group = 'com.mishenev'

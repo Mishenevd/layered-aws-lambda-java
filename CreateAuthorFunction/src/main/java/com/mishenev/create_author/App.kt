@@ -7,8 +7,11 @@ import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.mishenev.CreateAuthorEventValidator
 import com.mishenev.create_author.db.AuthorRepository
+import com.mishenev.create_author.db.AuthorRepositoryJdbcImpl
 
 class App(private val authorRepository: AuthorRepository): RequestHandler<SQSEvent, Unit> {
+    constructor(): this(AuthorRepositoryJdbcImpl())
+
     override fun handleRequest(input: SQSEvent, context: Context) {
         val logger = context.logger
         val mapper = jacksonObjectMapper()

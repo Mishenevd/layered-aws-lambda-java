@@ -90,7 +90,7 @@ Resources:
           - sg-0e3f43d4cb8d16e9c
         SubnetIds:
           - subnet-06e4915d73f2b73da # private2-euc-1b
-      CodeUri: BooksByNameCounterFunction
+      CodeUri: CreateAuthorFunction
       Handler: com.mishenev.create_author.App::handleRequest
       Events:
         CreateAuthorEvent:
