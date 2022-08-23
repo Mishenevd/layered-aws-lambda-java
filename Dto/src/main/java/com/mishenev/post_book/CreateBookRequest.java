@@ -1,4 +1,4 @@
-package com.mishenev;
+package com.mishenev.post_book;
 
 import com.amazonaws.util.json.Jackson;
 

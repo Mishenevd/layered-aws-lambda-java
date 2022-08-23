@@ -15,6 +15,7 @@ repositories {
 dependencies {
     // AWS Lambda Function layers
     compileOnly 'com.mishenev:lib-validate-layer:0.1-SNAPSHOT'
+    compileOnly 'com.mishenev:dto-layer:0.1-SNAPSHOT'
 
     // AWS libs
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
@@ -29,6 +30,7 @@ dependencies {
     testImplementation 'com.mishenev:lib-validate-layer:0.1-SNAPSHOT'
 
     // Tests
+    testCompileOnly 'com.mishenev:dto-layer:0.1-SNAPSHOT'
     testImplementation 'org.mockito:mockito-core:4.6.1'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.6.1'
     testImplementation 'com.amazonaws:aws-lambda-java-tests:1.1.1'

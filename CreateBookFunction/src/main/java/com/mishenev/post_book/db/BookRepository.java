@@ -1,7 +1,7 @@
 package com.mishenev.post_book.db;
 
 
-import com.mishenev.CreateBookRequest;
+import com.mishenev.post_book.CreateBookRequest;
 
 /**
  * Repository abstraction over the Book domain.

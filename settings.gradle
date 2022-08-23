@@ -1,5 +1,10 @@
 rootProject.name = 'library-aws'
 
-include 'BookValidationLayer'
+// Lambda Functions
 include 'CreateBookFunction'
 include 'BooksByNameCounterFunction'
+include 'CreateAuthorFunction'
+
+// Lambda Layers
+include 'BookValidationLayer'
+include 'Dto'

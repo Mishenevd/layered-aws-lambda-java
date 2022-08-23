@@ -25,7 +25,7 @@ Resources:
         SecurityGroupIds:
           - sg-0e3f43d4cb8d16e9c
         SubnetIds:
-          - subnet-0e9463096d7ddb9d3
+          - subnet-0e9463096d7ddb9d3 #private1-euc-1a
       CodeUri: CreateBookFunction
       Handler: com.mishenev.post_book.App::handleRequest
       Events:
@@ -50,6 +50,18 @@ Resources:
       RetentionPolicy: Retain
     Metadata:
       BuildMethod: java11
+  DtoLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: dto-layer
+      Description: Lambda Layer for validation
+      ContentUri: Dto/
+      CompatibleRuntimes:
+        - java11
+      LicenseInfo: 'MIT'
+      RetentionPolicy: Retain
+    Metadata:
+      BuildMethod: java11
   BooksByNameCounterFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -57,7 +69,7 @@ Resources:
         SecurityGroupIds:
           - sg-0e3f43d4cb8d16e9c
         SubnetIds:
-          - subnet-0e9463096d7ddb9d3
+          - subnet-0e9463096d7ddb9d3 #private1-euc-1a
       CodeUri: BooksByNameCounterFunction
       Handler: com.mishenev.count_book.App::handleRequest
       Events:
@@ -70,6 +82,30 @@ Resources:
         - AWSSecretsManagerGetSecretValuePolicy:
             SecretArn:
               arn:aws:secretsmanager:eu-central-1:679305952734:secret:dev_library_postgres_creds-vAa5dM
+  CreateAuthorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-0e3f43d4cb8d16e9c
+        SubnetIds:
+          - subnet-06e4915d73f2b73da # private2-euc-1b
+      CodeUri: BooksByNameCounterFunction
+      Handler: com.mishenev.create_author.App::handleRequest
+      Events:
+        CreateAuthorEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt NewAuthorQueue.Arn
+            BatchSize: 100 # trigger Lambda with 100 CreateAuthorEvent messages per batch
+            MaximumBatchingWindowInSeconds: 60 # how many seconds SQS will wait to collect messages batch before invoking Lambda
+            # Queue visibility timeout = 6 * function timeout (20s) + BatchWindow (60s) = 3 min
+      Policies:
+        - AWSSecretsManagerGetSecretValuePolicy:
+            SecretArn:
+              arn:aws:secretsmanager:eu-central-1:679305952734:secret:dev_library_postgres_creds-vAa5dM
+  NewAuthorQueue:
+    Type: AWS::SQS::Queue
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

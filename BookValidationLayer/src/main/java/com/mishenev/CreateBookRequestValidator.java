@@ -1,5 +1,7 @@
 package com.mishenev;
 
+import com.mishenev.post_book.CreateBookRequest;
+
 import com.amazonaws.util.StringUtils;
 
 /**

@@ -1,6 +1,5 @@
 package com.mishenev.post_book;
 
-import com.mishenev.CreateBookRequest;
 import com.mishenev.CreateBookRequestValidator;
 import com.mishenev.post_book.db.BookRepository;
 import com.mishenev.post_book.db.BookRepositoryJdbcImpl;

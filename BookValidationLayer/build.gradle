@@ -15,6 +15,9 @@ repositories {
 apply plugin: 'maven-publish'
 
 dependencies {
+    // AWS Lambda Function layers
+    compileOnly 'com.mishenev:dto-layer:0.1-SNAPSHOT'
+
     implementation 'com.amazonaws:aws-java-sdk-core:1.12.249'
 
     // Tests
